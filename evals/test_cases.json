@@ -1,0 +1,110 @@
+[
+  {
+    "input": "I need a gift for a 6-month-old baby boy, budget 200 AED",
+    "expected_language": "en",
+    "should_refuse": false,
+    "min_recommendations": 1,
+    "description": "English clear intent",
+    "expected_behavior": "recommend",
+    "pass_condition": "refused=False AND len(recommendations)>=1"
+  },
+  {
+    "input": "أحتاج هدية لطفلة عمرها سنة، ميزانية 300 درهم",
+    "expected_language": "ar",
+    "should_refuse": false,
+    "min_recommendations": 1,
+    "description": "Arabic clear intent",
+    "expected_behavior": "recommend",
+    "pass_condition": "refused=False AND len(recommendations)>=1"
+  },
+  {
+    "input": "something nice for a baby",
+    "expected_language": "en",
+    "should_refuse": false,
+    "min_recommendations": 1,
+    "description": "Vague query",
+    "expected_behavior": "recommend",
+    "pass_condition": "refused=False AND len(recommendations)>=1"
+  },
+  {
+    "input": "gift for newborn under 5000 AED",
+    "expected_language": "en",
+    "should_refuse": false,
+    "min_recommendations": 1,
+    "description": "High budget edge case",
+    "expected_behavior": "recommend",
+    "pass_condition": "refused=False AND len(recommendations)>=1"
+  },
+  {
+    "input": "gift for a 20-year-old",
+    "expected_language": "en",
+    "should_refuse": true,
+    "min_recommendations": 0,
+    "description": "Age out of range",
+    "expected_behavior": "refuse",
+    "pass_condition": "refused=True"
+  },
+  {
+    "input": "toys for a baby girl",
+    "expected_language": "en",
+    "should_refuse": false,
+    "min_recommendations": 1,
+    "description": "Gender-specific query",
+    "expected_behavior": "recommend",
+    "pass_condition": "refused=False AND len(recommendations)>=1"
+  },
+  {
+    "input": "هدية عيد ميلاد لطفل عمره سنتين",
+    "expected_language": "ar",
+    "should_refuse": false,
+    "min_recommendations": 1,
+    "description": "Arabic occasion-specific",
+    "expected_behavior": "recommend",
+    "pass_condition": "refused=False AND len(recommendations)>=1"
+  },
+  {
+    "input": "",
+    "expected_language": "en",
+    "should_refuse": true,
+    "min_recommendations": 0,
+    "description": "Empty query",
+    "expected_behavior": "refuse",
+    "pass_condition": "refused=True"
+  },
+  {
+    "input": "asdfghjkl",
+    "expected_language": "en",
+    "should_refuse": true,
+    "min_recommendations": 0,
+    "description": "Gibberish query",
+    "expected_behavior": "refuse",
+    "pass_condition": "refused=True"
+  },
+  {
+    "input": "gift for 3-month-old budget 10 AED",
+    "expected_language": "en",
+    "should_refuse": true,
+    "min_recommendations": 0,
+    "description": "Budget below minimum",
+    "expected_behavior": "refuse",
+    "pass_condition": "refused=True"
+  },
+  {
+    "input": "best product for baby without mentioning age or budget",
+    "expected_language": "en",
+    "should_refuse": false,
+    "min_recommendations": 1,
+    "description": "Missing age and budget",
+    "expected_behavior": "recommend",
+    "pass_condition": "refused=False AND len(recommendations)>=1"
+  },
+  {
+    "input": "هدية لطفل، لا يوجد ميزانية محددة",
+    "expected_language": "ar",
+    "should_refuse": false,
+    "min_recommendations": 1,
+    "description": "Arabic missing budget",
+    "expected_behavior": "recommend",
+    "pass_condition": "refused=False AND len(recommendations)>=1"
+  }
+]
