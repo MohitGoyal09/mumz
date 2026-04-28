@@ -18,6 +18,7 @@
 - **Explicit Uncertainty Handling** — Refuses out-of-scope queries with bilingual reasons (budget too low, age too high, gibberish)
 - **Hallucination Guard** — All recommended `product_id`s are verified against the catalog; no fabricated products
 - **FastAPI + Typer CLI** — Production-ready API and interactive command-line interface
+- **Streamlit Frontend** — Two-tab web UI with AI gift finder and browsable catalog data table with filters
 - **Automated Evaluations** — 12 test cases with PASS/PARTIAL/FAIL grading and hallucination detection
 
 ---
@@ -115,6 +116,7 @@ The search index is built **lazily on first request** (no manual step needed):
 | LLM Inference | [OpenRouter](https://openrouter.ai) | Qwen-2.5-72B-Instruct for intent parsing & recommendation |
 | Language Detection | [langdetect](https://pypi.org/project/langdetect/) | Query language identification |
 | HTTP Client | [httpx](https://www.python-httpx.org) | Async-capable API calls to OpenRouter |
+| Frontend | [Streamlit](https://streamlit.io) | Interactive web UI for gift search and catalog browsing |
 | Testing | [pytest](https://docs.pytest.org) | Unit and integration tests |
 
 ---
@@ -271,6 +273,25 @@ Confidence: 0.85
 
 ---
 
+### Streamlit Frontend
+
+Start the FastAPI server first, then launch the Streamlit UI:
+
+```bash
+# Terminal 1 — start the API
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+
+# Terminal 2 — start the frontend
+streamlit run frontend/app.py
+```
+
+The UI opens at [http://localhost:8501](http://localhost:8501) with two tabs:
+
+- **🎁 Find Gifts** — Enter a free-text query (English or Arabic) and get AI-ranked product recommendations with bilingual reasoning
+- **📦 Browse Catalog** — Filter, sort, and explore the full product catalog with stats and expandable product details
+
+---
+
 ## Project Structure
 
 ```
@@ -281,6 +302,10 @@ mumzworld-gift-finder/
 │   └── demo.py                    # Typer CLI (recommend + interactive)
 ├── data/
 │   └── catalog.json               # 100-product synthetic catalog (EN+AR)
+├── frontend/
+│   └── app.py                     # Streamlit web UI (gift finder + catalog browser)
+├── .streamlit/
+│   └── config.toml                # Streamlit theme configuration
 ├── docs/
 │   ├── prd.md                     # Product Requirements Document
 │   └── req.md                     # Assignment requirements
@@ -464,6 +489,15 @@ See [`TRADEOFFS.md`](TRADEOFFS.md) for detailed discussion of:
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## Tooling
+
+This project was built with AI-assisted tooling:
+
+- **Data Generation** — The 100-product bilingual synthetic catalog (`data/catalog.json`) was generated using [Claude](https://claude.ai) (Anthropic) with structured prompting for native-quality Arabic product names and descriptions
+- **Code Development** — The entire codebase, architecture, and Streamlit frontend were developed using [OpenCode](https://opencode.ai) with the **Kimi K2.6** model
 
 ---
 
