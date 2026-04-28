@@ -1,11 +1,13 @@
 # Mumzworld AI Gift Finder
 
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com)
-[![Pydantic v2](https://img.shields.io/badge/Pydantic-v2-e92063.svg)](https://docs.pydantic.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[Python 3.12+](https://www.python.org/downloads/)
+[FastAPI](https://fastapi.tiangolo.com)
+[Pydantic v2](https://docs.pydantic.dev)
+[License: MIT](LICENSE)
 
 > **Multilingual AI-powered gift recommendation engine for Mumzworld.** Accepts free-text queries in **English** or **Arabic**, parses user intent via LLM, retrieves matching products via FAISS embedding search over a synthetic catalog, and generates ranked recommendations with **native-quality bilingual reasoning**.
+>
+> 🎥 **[Watch the 3-Minute Demo (Loom)](https://www.loom.com/share/2703472d63d7447294593e0449c47944)**
 
 ---
 
@@ -69,19 +71,19 @@ User Query (EN/AR)
 1. **Language Detection** — `langdetect` identifies the query language (`en` or `ar`)
 2. **Intent Parsing** — LLM extracts structured intent: `child_age_months`, `budget_aed`, `occasion`, `relationship`, `gender_preference`
 3. **Validation** — Rule-based guardrails:
-   - Budget < 15 AED → refuse
-   - Child age > 144 months (12 years) → refuse
-   - `is_parseable=False` or non-baby-related → refuse
-   - Missing optional fields (budget, age, gender) → **allowed**, passed as `null`
+  - Budget < 15 AED → refuse
+  - Child age > 144 months (12 years) → refuse
+  - `is_parseable=False` or non-baby-related → refuse
+  - Missing optional fields (budget, age, gender) → **allowed**, passed as `null`
 4. **Retrieval** — Embedding search over 100-product catalog:
-   - Embed query intent into 384-dim vector
-   - FAISS `IndexFlatIP` with L2-normalized vectors (cosine similarity)
-   - Pre-filter candidates by budget, age compatibility, and gender
-   - Return top-20 candidates
+  - Embed query intent into 384-dim vector
+  - FAISS `IndexFlatIP` with L2-normalized vectors (cosine similarity)
+  - Pre-filter candidates by budget, age compatibility, and gender
+  - Return top-20 candidates
 5. **Recommendation** — LLM ranks top-3 from candidates and generates:
-   - `reason_en` + `reason_ar` — why this product matches
-   - `summary_en` + `summary_ar` — overall recommendation summary
-   - `confidence` — 0.0 to 1.0 match confidence
+  - `reason_en` + `reason_ar` — why this product matches
+  - `summary_en` + `summary_ar` — overall recommendation summary
+  - `confidence` — 0.0 to 1.0 match confidence
 6. **Response** — Validated against `GiftResponseSchema` (Pydantic v2)
 
 ### FAISS Index Building
@@ -106,18 +108,20 @@ The search index is built **lazily on first request** (no manual step needed):
 
 ## Tech Stack
 
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| API Framework | [FastAPI](https://fastapi.tiangolo.com) | REST API with auto-generated OpenAPI docs |
-| CLI Framework | [Typer](https://typer.tiangolo.com) | Interactive command-line interface |
-| Schema Validation | [Pydantic v2](https://docs.pydantic.dev) | Type-safe data models and request/response validation |
-| Vector Search | [FAISS](https://github.com/facebookresearch/faiss) | Efficient similarity search over product embeddings |
-| Embeddings | [sentence-transformers](https://www.sbert.net) | `paraphrase-multilingual-MiniLM-L12-v2` for EN/AR text |
-| LLM Inference | [OpenRouter](https://openrouter.ai) | Qwen-2.5-72B-Instruct for intent parsing & recommendation |
-| Language Detection | [langdetect](https://pypi.org/project/langdetect/) | Query language identification |
-| HTTP Client | [httpx](https://www.python-httpx.org) | Async-capable API calls to OpenRouter |
-| Frontend | [Streamlit](https://streamlit.io) | Interactive web UI for gift search and catalog browsing |
-| Testing | [pytest](https://docs.pytest.org) | Unit and integration tests |
+
+| Component          | Technology                                         | Purpose                                                   |
+| ------------------ | -------------------------------------------------- | --------------------------------------------------------- |
+| API Framework      | [FastAPI](https://fastapi.tiangolo.com)            | REST API with auto-generated OpenAPI docs                 |
+| CLI Framework      | [Typer](https://typer.tiangolo.com)                | Interactive command-line interface                        |
+| Schema Validation  | [Pydantic v2](https://docs.pydantic.dev)           | Type-safe data models and request/response validation     |
+| Vector Search      | [FAISS](https://github.com/facebookresearch/faiss) | Efficient similarity search over product embeddings       |
+| Embeddings         | [sentence-transformers](https://www.sbert.net)     | `paraphrase-multilingual-MiniLM-L12-v2` for EN/AR text    |
+| LLM Inference      | [OpenRouter](https://openrouter.ai)                | Qwen-2.5-72B-Instruct for intent parsing & recommendation |
+| Language Detection | [langdetect](https://pypi.org/project/langdetect/) | Query language identification                             |
+| HTTP Client        | [httpx](https://www.python-httpx.org)              | Async-capable API calls to OpenRouter                     |
+| Frontend           | [Streamlit](https://streamlit.io)                  | Interactive web UI for gift search and catalog browsing   |
+| Testing            | [pytest](https://docs.pytest.org)                  | Unit and integration tests                                |
+
 
 ---
 
@@ -131,7 +135,7 @@ The search index is built **lazily on first request** (no manual step needed):
 ### 1. Clone & Setup
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/MohitGoyal09/mumz
 cd mumzworld-gift-finder
 
 # Create virtual environment
@@ -177,10 +181,12 @@ Interactive docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 #### Endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
+
+| Method | Path         | Description                                    |
+| ------ | ------------ | ---------------------------------------------- |
 | `POST` | `/recommend` | Submit a query, receive ranked recommendations |
-| `GET`  | `/health` | Health check |
+| `GET`  | `/health`    | Health check                                   |
+
 
 #### Example: English Query
 
@@ -191,6 +197,7 @@ curl -X POST http://localhost:8000/recommend \
 ```
 
 **Response**:
+
 ```json
 {
   "query_language": "en",
@@ -229,6 +236,7 @@ curl -X POST http://localhost:8000/recommend \
 ```
 
 **Response**:
+
 ```json
 {
   "query_language": "en",
@@ -370,20 +378,22 @@ pytest tests/ --cov=src --cov-report=term-missing
 
 12 test cases covering easy, adversarial, and edge-case scenarios:
 
-| # | Case | Language | Expected | Type |
-|---|------|----------|----------|------|
-| 1 | Clear intent with budget & age | EN | Recommend | Easy |
-| 2 | Clear Arabic intent | AR | Recommend | Easy |
-| 3 | Vague query | EN | Recommend | Edge |
-| 4 | High budget edge case | EN | Recommend | Edge |
-| 5 | Age out of range (20 years) | EN | Refuse | Adversarial |
-| 6 | Gender-specific query | EN | Recommend | Easy |
-| 7 | Arabic occasion-specific | AR | Recommend | Easy |
-| 8 | Empty query | EN | Refuse | Adversarial |
-| 9 | Gibberish query | EN | Refuse | Adversarial |
-| 10 | Budget below minimum (10 AED) | EN | Refuse | Adversarial |
-| 11 | Missing age and budget | EN | Recommend | Edge |
-| 12 | Arabic missing budget | AR | Recommend | Edge |
+
+| #   | Case                           | Language | Expected  | Type        |
+| --- | ------------------------------ | -------- | --------- | ----------- |
+| 1   | Clear intent with budget & age | EN       | Recommend | Easy        |
+| 2   | Clear Arabic intent            | AR       | Recommend | Easy        |
+| 3   | Vague query                    | EN       | Recommend | Edge        |
+| 4   | High budget edge case          | EN       | Recommend | Edge        |
+| 5   | Age out of range (20 years)    | EN       | Refuse    | Adversarial |
+| 6   | Gender-specific query          | EN       | Recommend | Easy        |
+| 7   | Arabic occasion-specific       | AR       | Recommend | Easy        |
+| 8   | Empty query                    | EN       | Refuse    | Adversarial |
+| 9   | Gibberish query                | EN       | Refuse    | Adversarial |
+| 10  | Budget below minimum (10 AED)  | EN       | Refuse    | Adversarial |
+| 11  | Missing age and budget         | EN       | Recommend | Edge        |
+| 12  | Arabic missing budget          | AR       | Recommend | Edge        |
+
 
 ### Run Evaluations
 
@@ -395,13 +405,14 @@ python evals/grader.py
 ```
 
 **Grading criteria**:
+
 - **PASS**: Correct refusal behavior + recommendations + no hallucinations + bilingual output
 - **PARTIAL**: Correct refusal but minor quality issues
 - **FAIL**: Wrong refusal, hallucination, or missing critical output
 
 **Hallucination guard**: Any `product_id` not in `data/catalog.json` auto-FAILs.
 
-See [`EVALS.md`](EVALS.md) for full rubric, iteration history, and honest failure analysis.
+See `[EVALS.md](EVALS.md)` for full rubric, iteration history, and honest failure analysis.
 
 ---
 
@@ -409,11 +420,14 @@ See [`EVALS.md`](EVALS.md) for full rubric, iteration history, and honest failur
 
 ### Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `OPENROUTER_API_KEY` | ✅ Yes | API key for OpenRouter LLM inference |
+
+| Variable             | Required | Description                          |
+| -------------------- | -------- | ------------------------------------ |
+| `OPENROUTER_API_KEY` | ✅ Yes    | API key for OpenRouter LLM inference |
+
 
 Create a `.env` file:
+
 ```bash
 OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxx
 ```
@@ -421,6 +435,7 @@ OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxx
 ### Catalog Data
 
 The synthetic catalog (`data/catalog.json`) contains 100 baby products across 6 categories:
+
 - **Feeding** — Bottles, breast pumps, sterilizers
 - **Gear** — Carriers, strollers, car seats
 - **Nursery** — Cribs, monitors, bedding
@@ -468,6 +483,7 @@ build_index()  # Pre-build before serving requests
 **Symptom**: `ModuleNotFoundError: No module named 'src'`
 
 **Fix**: Install in editable mode:
+
 ```bash
 pip install -e ".[dev]"
 ```
@@ -476,7 +492,7 @@ pip install -e ".[dev]"
 
 ## Architecture Decisions
 
-See [`TRADEOFFS.md`](TRADEOFFS.md) for detailed discussion of:
+See `[TRADEOFFS.md](TRADEOFFS.md)` for detailed discussion of:
 
 - **Why two LLM calls?** Separation of concerns: intent parsing (structured extraction) vs. recommendation (ranking + reasoning)
 - **Why FAISS + sentence-transformers?** Fast, local, multilingual semantic search without external vector DB costs
@@ -507,3 +523,4 @@ This project was built with AI-assisted tooling:
 - LLM inference powered by [OpenRouter](https://openrouter.ai)
 - Embeddings powered by [sentence-transformers](https://www.sbert.net)
 - Vector search powered by [FAISS](https://github.com/facebookresearch/faiss)
+
